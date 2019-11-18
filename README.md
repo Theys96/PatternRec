@@ -1,2 +1,2 @@
 # PatternRec
-Repository for University of Groninge course "Pattern Recognition"
+Repository for University of Groningen course "Pattern Recognition".
