@@ -12,8 +12,9 @@ for rep = 1:10000
    iris2 = load(filename2);
    iris1 = iris1.iriscode;
    iris2 = iris2.iriscode;
-  rdmf = randi([1,size(iris1,1)]);
-  hamming = HD(iris1(rdmf,:),iris2(rdmf,:));
+  f1 = randi([1,size(iris1,1)]);
+  f2 = randi([1,size(iris1,1)]);
+  hamming = HD(iris1(f1,:),iris2(f2,:));
   D = [D hamming];
 end
 histogram(D,bins,'FaceColor','r')
