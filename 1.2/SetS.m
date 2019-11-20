@@ -13,11 +13,17 @@ for rep = 1:10000
     hamming = HD(iris(f1,:),iris(f2,:));
     S = [S hamming];
 end
-histogram(S,bins,'FaceColor','b')
+Smean = mean(S);
+Svar = var(S);
+h = histogram(S,bins,'FaceColor','b');
+Sheight = max(h.Values);
 xlabel('HD')
 ylabel('count')
 legend;
 hold on
-Smean = mean(S);
-Svar = var(S);
+x = [min(S):0.01:max(S)]
+NormS = normpdf(x,Smean,sqrt(Svar));
+NormS = (NormS/max(NormS))*Sheight;
+plot(x,NormS,'b','LineWidth',3);
+hold on
 end

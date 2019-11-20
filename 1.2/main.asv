@@ -2,4 +2,7 @@ function void = main;
 [Smean,Svar] = SetS(7)
 [Dmean,Dvar] = SetD(7)
 DoF = (Dmean*(1-Dmean))/Dvar
+x = [0:0.01:1]
+NormS = normpdf([0,0.01,1],Smean,Svar);
+plot(
 end
