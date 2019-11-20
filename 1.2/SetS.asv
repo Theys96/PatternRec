@@ -5,25 +5,25 @@ for rep = 1:10000
     filename = sprintf('person%02d.mat',rdm);
     iris = load(filename);
     iris = iris.iriscode; %get iris code table 
-    f1 = randi([1,size(iris,1)]); %draw a row from the table
+    f1 = randi([1,size(iris,1)]);
     f2 = f1;
     while (f2 == f1)
-        f2 = randi([1,size(iris,1)]); %draw another (different) row from the table
+        f2 = randi([1,size(iris,1)]);
     end
-    hamming = HD(iris(f1,:),iris(f2,:)); %call HD.m to compute hamming distance
+    hamming = HD(iris(f1,:),iris(f2,:));
     S = [S hamming];
 end
 Smean = mean(S);
 Svar = var(S);
 h = histogram(S,bins,'FaceColor','b');
-Sheight = max(h.Values); %get the highest count in a bin
+Sheight = max(h.Values);
 xlabel('HD')
 ylabel('count')
 legend;
 hold on
-x = [min(S):0.01:max(S)] %create even spaced interval
-NormS = normpdf(x,Smean,sqrt(Svar)); %draw gaussian with same parameters as D set
-NormS = (NormS/max(NormS))*Sheight;  %rescale the latter
+x = [min(S):0.01:max(S)]
+NormS = normpdf(x,Smean,sqrt(Svar));
+NormS = (NormS/max(NormS))*Sheight;
 plot(x,NormS,'b','LineWidth',3);
 hold on
 end
