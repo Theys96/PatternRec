@@ -1,4 +1,4 @@
-function ccvec = CC(data);
+function ccvec = CC(data); %data must be istances x features matrix
 fname = ["height(cm)",  "age(years)", "weight(kg)"];
 ccvec = corrcoef(data);   %built in to get matrix of correlation coeffients
 antieye = ~eye(size(ccvec));
