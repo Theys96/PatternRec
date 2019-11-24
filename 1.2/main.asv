@@ -1,8 +1,6 @@
-function void = main;
-[Smean,Svar] = SetS(7)
-[Dmean,Dvar] = SetD(7)
-DoF = (Dmean*(1-Dmean))/Dvar
-x = [0:0.01:1]
-NormS = normpdf([0,0.01,1],Smean,Svar);
-plot(
+function void = main
+codes = load_iriscodes(20,'person%02d.mat');
+[Smean,Svar] = SetS(codes, 10000, true)
+[Dmean,Dvar] = SetD(codes,10000mt
+%DoF = (Dmean*(1-Dmean))/Dvar %effective degrees of freedom
 end
