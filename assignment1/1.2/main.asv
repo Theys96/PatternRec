@@ -1,0 +1,6 @@
+function void = main
+codes = load_iriscodes(20,'person%02d.mat');
+[Smean,Svar] = SetS(codes, 10000, true)
+[Dmean,Dvar] = SetD(codes,10000mt
+%DoF = (Dmean*(1-Dmean))/Dvar %effective degrees of freedom
+end

@@ -1,0 +1,35 @@
+function [Dmean,Dvar] = SetD(codes,iterations,fitpdf)
+D = [];
+for rep = 1:iterations
+   p1 = randi([1,20]);          %draw person 1
+   p2 = p1;
+   while (p2 == p1)
+       p2 = randi([1,20]);      %draw person 1 (!= person 2)
+   end
+   iris1 = codes(:,:,p1);
+   iris2 = codes(:,:,p2);
+  f1 = randi([1,size(iris1,1)]);            %draw row 
+  f2 = randi([1,size(iris1,1)]);            %draw another row.
+  hamming = HD(iris1(f1,:),iris2(f2,:));    %compute hamming distance
+  D = [D hamming];
+end
+Dmean = mean(D);
+Dvar = var(D);
+
+%histogram
+xlabel('HD','FontSize',14);
+ylabel('Count','FontSize',14);
+h = histogram(D,[(1/60):(1/30):1],'FaceColor','r');
+lgd = legend;
+lgd.FontSize = 12;
+grid on
+hold on
+
+if fitpdf %Gaussian fit of histogram
+    x = [min(D):0.01:max(D)];                         %create even spaced interval
+    NormD = normpdf(x,Dmean,sqrt(Dvar));   %draw gaussian with same parameters as D set
+    NormD = NormD*iterations/h.NumBins;    %rescale the latter
+    plot(x,NormD,'r','LineWidth',3,'DisplayName','D pdf');
+    hold on
+end
+end

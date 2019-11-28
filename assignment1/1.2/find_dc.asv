@@ -1,0 +1,17 @@
+function dc = find_dc(mean,var,err) %input PDF parameters and false acceptance rate
+cp = 0;
+x = [0:0.01:1];
+i = ;
+while cp < err    %naive bracketing: find initial guess interval for bisection
+    x(i)
+    cp = normcdf(x(i),mean,sqrt(var));
+    
+end
+%f = inline('normcdf(z,mean,sqrt(var))-err','z','mean','var','err')
+f = @(z)(normcdf(z,mean,sqrt(var))-err);
+x(i-1)
+x(i)
+f(x(i-1))
+f(x(i))
+dc = bisection(f,x(i-1),x(i),1e-7);
+end
