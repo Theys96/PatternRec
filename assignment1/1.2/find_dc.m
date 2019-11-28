@@ -9,6 +9,6 @@ while cp < err
 %Now we know correspondent HD value is somewhere in [x(i-1),x(i)]
 end
 f = @(z)(normcdf(z,mean,sqrt(var))-err);  %define f in RHS = 0 form
-dc = bisection(f,x(i-1),x(i),1e-10)       %call root finder with arbitrary treshold
-actual_err = normcdf(dc,mean,sqrt(var))
+dc = bisection(f,x(i-1),x(i),1e-10);       %call root finder with arbitrary treshold
+actual_err = normcdf(dc,mean,sqrt(var));
 end

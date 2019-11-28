@@ -26,7 +26,7 @@ grid on
 hold on
 
 if fitpdf %Gaussian fit of histogram
-    x = [min(D):0.01:max(D)]                         %create even spaced interval
+    x = [min(D):0.01:max(D)];                         %create even spaced interval
     NormD = normpdf(x,Dmean,sqrt(Dvar));   %draw gaussian with same parameters as D set
     NormD = NormD*iterations/h.NumBins;    %rescale the latter
     plot(x,NormD,'r','LineWidth',3,'DisplayName','D pdf');
