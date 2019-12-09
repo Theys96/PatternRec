@@ -1,0 +1,88 @@
+clear all;
+load lab3_2.mat;
+
+K = 3;
+samples = 64; 
+data = lab3_2; %training set
+nr_of_classes = 2;
+
+% Class labels
+class_labels = floor( (0:length(data)-1) * nr_of_classes / length(data) );
+
+% Sample the parameter space
+result=zeros(samples);
+for i=1:samples
+  X=(i-1/2)/samples;
+  for j=1:samples
+    Y=(j-1/2)/samples;
+    result(j,i) = KNN([X Y],K,data,class_labels);
+  end;
+end;
+
+% Show the results in a figure
+figure(1)
+imshow(result,[0 nr_of_classes-1],'InitialMagnification','fit')
+hold on;
+title([int2str(K) '-NN, ' int2str(nr_of_classes) ' classes']);
+
+% this is only correct for the first question
+scaled_data=samples*data;
+plot(scaled_data(  1:100,1),scaled_data(  1:100,2),'go');
+plot(scaled_data(101:200,1),scaled_data(101:200,2),'r+');
+hold off
+
+%LOOCV (leave one out cross validation)
+err_vec = [];
+for K = 1:20
+  misclassified = 0;
+  for i = 1:length(data)
+    train = [data(1:i-1,:); data(i+1:length(data),:)];
+    label_train = [class_labels(1:i-1) class_labels(i+1:length(data))];
+    test = data(i,:);
+    result = KNN(test,K,train,label_train);
+    if (result ~= class_labels(i))
+      misclassified = misclassified +1;
+    end
+  end
+  err_rate = misclassified/length(data);
+  if (K == 3 || K == 17)
+    fprintf('accuracy for K = %g: %f \n',K,err_rate)
+  end
+  err_vec = [err_vec err_rate];
+end
+plot([1:20],err_vec,'LineWidth',3,'color','red')
+grid on
+xlabel('K','FontSize',14);
+ylabel('error rate','FontSize',14);
+title('LOOCV KNN accuracy','FontSize',14);
+fprintf('optimal value of K is %g with an error rate of %f \n',8,err_vec(8))
+
+% 4 classes
+nr_of_classes = 4;
+fac = length(data)/nr_of_classes;
+for k = (0:nr_of_classes-1)
+  left = 1 + k*fac;
+  right = (k+1)*fac;
+  class_labels(left:right) = k+1;
+end
+
+%sample the parameter space
+K = 1
+result=zeros(samples);
+for i=1:samples
+  X=(i-1/2)/samples;
+  for j=1:samples
+    Y=(j-1/2)/samples;
+    result(j,i) = KNN([X Y],K,data,class_labels);
+  end;
+end;
+
+imshow(result,[0 nr_of_classes-1],'InitialMagnification','fit')
+hold on;
+title([int2str(K) '-NN, ' int2str(nr_of_classes) ' classes']);
+scaled_data=samples*data;
+plot(scaled_data(  1:50,1),scaled_data(  1:50,2),'go');
+plot(scaled_data(51:100,1),scaled_data(51:100,2),'b*');
+plot(scaled_data(101:150,1),scaled_data(101:150,2),'r+');
+plot(scaled_data(151:200,1),scaled_data(151:200,2),'cs');
+hold off
