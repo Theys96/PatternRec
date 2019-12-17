@@ -1,0 +1,28 @@
+function accumulator = myhough(edge_map)
+  theta = [1:180];
+  theta = deg2rad(theta);
+  sizex = size(edge_map,1);
+  sizey = size(edge_map,2);
+ 
+  accumulator = [];
+  for i = 1:sizex
+    for j = 1:sizey
+      if (edge_map(i,j) == 1)
+        k = 0;
+        for angle = theta
+          k = k+1;
+          rho = floor(i*cos(angle) + j*sin(angle));
+          if rho > 0
+            if (size(accumulator,1) < rho+1)
+              if (size(accumulator,2) < k)
+                accumulator(rho+1,k) = 1;
+                accumulator(rho
+            else
+              accumulator(rho+1,k) = accumulator(rho+1,k) + 1;
+            end
+          end
+        end
+      end
+    end
+  end
+  size(accumulator)
