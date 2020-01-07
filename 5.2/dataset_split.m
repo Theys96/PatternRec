@@ -1,4 +1,4 @@
-function [train,test] = dataset_split(data,ntrain,ntest)
+function [train,test] = dataset_split(data,ntrain,ntest,fold)
   nsubsets = ntrain + ntest;
   %obtain size of the data set
   nfeatures = size(data,2);
@@ -20,17 +20,17 @@ function [train,test] = dataset_split(data,ntrain,ntest)
   %examples as class B examples. 
   
   half = nsamples/2; %each subset will be split halfway in such a way to resemble the parent data set
-  k = 0; 
-  ss = 1; %subset index
+  idx = 1:nsubsets;  %array of indices
+  idx(fold) = [];    %remove idx correspondent to test subset
+  
+  %test subset
+  test(1:half,:)          = data(((fold-1)*half)+1:((fold-1)*half)+half,:);
+  test(half+1:nsamples,:) = data(split+((fold-1)*half)+1:split+fold*half,:);
   
   %training subsets
-  while ss <= ntrain
-    train(1:half,:,ss)          = data((k*half)+1:(k*half)+half,:);
-    train(half+1:nsamples,:,ss) = data(split+(k*half)+1:split+(k+1)*half,:);
-    k = k+1;
-    ss = ss+1;
+  for ss = 1:ntrain
+    train(1:half,:,ss)          = data(((idx(ss)-1)*half)+1:((idx(ss)-1)*half)+half,:);
+    train(half+1:nsamples,:,ss) = data(split+((idx(ss)-1)*half)+1:split+idx(ss)*half,:);
   end
-  %test subset
-  test(1:half,:)          = data((k*half)+1:(k*half)+half,:);
-  test(half+1:nsamples,:) = data(split+(k*half)+1:split+(k+1)*half,:);
+  
 end

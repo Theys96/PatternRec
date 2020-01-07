@@ -1,6 +1,6 @@
 A = load('data_lvq_A.mat').matA;
 B = load('data_lvq_B.mat').matB;
-doPlot = true;
+doPlot = false;
 
 % Combine data sets with labels
 A(:,3) = 1;
@@ -30,14 +30,13 @@ eta = 0.01;
 
 %Q4 plot
 titleon = true;
-figure(4)
 plot_error_curve(E,nProt,eta,titleon);
 
 %Q5 & Q6 plot
 nProt_list = [[1 1]; [1 2]; [2 1]; [2 2]];
 titleon = false;
 for i = 1:4
-  figure(5)
+  figure(9)
   subplot(2,2,i);
   nProt = nProt_list(i,:);
   prototype = create_prototype(nProt,xRange,yRange);
@@ -45,11 +44,11 @@ for i = 1:4
   Xprot = attach_data_to_prototypes(X,prototype);
   plot_error_curve(E,nProt,eta,titleon);
   
-  figure(6)
+  figure(10)
   subplot(2,2,i);
   plotData(X,prototype,Xprot);
 end
-figure(5)
+figure(9)
 sgtitle({'LVQ training error curve' sprintf('\\eta = %.2f',eta)},'FontSize',15);
-figure(6)
+figure(10)
 sgtitle({'Data points and learnt prototypes' sprintf('\\eta = %.2f',eta)},'FontSize',15);
