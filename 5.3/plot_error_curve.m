@@ -4,7 +4,7 @@ function plot_error_curve(E,nProt,eta,titleon)
   xlabel('Epoch','FontSize',13); 
   ylabel('Classification error (training)','FontSize',13);
   if titleon == true
-    title({'LVQ training error curve' sprintf('\\eta = %.2f',eta)},'FontSize',12);
+    title({'LVQ training error curve' sprintf('\\eta_w = %.2f',eta)},'FontSize',12);
   end
   lgd = legend;
   lgd.FontSize = 12;

@@ -11,21 +11,18 @@ function [E,prototype,lambdas] = LVQ(X,prototype,eta,lambda,lambdeta,plateau_epo
     epoch = epoch + 1;                       % Increment epoch counter
     for i = 1:P                              % Loop over each data point
         example = X(i, :);                   % Select current data point
-        dist = zeros(length(prototype),1);
-        for p = 1:length(prototype)          % Loop over each prototype, compute the weighted euclidean distance
-            dist(p) = (lambda .* (example(1:2) - prototype(p,1:2))) * (example(1:2) - prototype(p,1:2))';
-        end
+        dist = rdist2(example, prototype, lambda);   % Euclidean distance using global relevances from the lambda vector
         [~,wstar] = min(dist);               % Find the minimum computed distance
         dir = Psi(prototype(wstar,3), example(3));   % direction of movement
         prototype(wstar,1:2) = prototype(wstar,1:2) + eta * dir * (example(1:2) - prototype(wstar,1:2));   % Update prototype
         lambda = lambda - lambdeta * dir * abs(example(1:2) - prototype(wstar,1:2));                       % Update lambda vector
-        lambda(lambda < 0) = 0;             % Threshold lambda >= 0
-        lambda = lambda / sum(lambda);      % Normalize to 1
+        lambda(lambda < 0) = 0;              % Threshold lambda >= 0
+        lambda = lambda / sum(lambda);       % Normalize to 1
     end
-    curr_E = trainingError(X,prototype);    % Compute the current training error
+    curr_E = trainingError(X,prototype,lambda);      % Compute the current training error
     lambdas(epoch,:) = lambda;    % Store current lambda vector
-    E(epoch)       = curr_E;    % Store current training error
-    if epoch > plateau_epochs               % Check for plateau-ing
+    E(epoch)         = curr_E;    % Store current training error
+    if epoch > plateau_epochs     % Check for plateau-ing
       if numel(unique(E(epoch-plateau_epochs:epoch))) == 1 || ...
          numel(unique(E(epoch-plateau_epochs:epoch))) == 2
         break
