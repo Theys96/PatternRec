@@ -1,4 +1,4 @@
-function plotData(X,prototype,Xprot)
+function plotData(X,prototype,Xprot,titl)
   if exist('prototype','var')
     scatter(prototype(prototype(:,3) == 1,1), prototype(prototype(:,3) == 1,2),75,'r','filled','DisplayName','Prototypes A');
     hold on
@@ -18,5 +18,9 @@ function plotData(X,prototype,Xprot)
   end
   lgd = legend;
   lgd.FontSize = 12;
+  if exist('titl','var')
+    ax = gca;
+    ax.Title.String = titl;
+  end
   hold off;
 end
