@@ -11,8 +11,6 @@ X = [A; B];
 xRange = [min(X(:,1)) max(X(:,1))]; 
 yRange = [min(X(:,2)) max(X(:,2))];
 
-ntrain = 9; %n° of training subsets in each fold
-ntest = 1;  %n° of test subsets in each fold
 nfolds = 10;
 
 nProt = [2 1]; %best option is 2 prototypes for class A and 1 for class B
@@ -22,19 +20,26 @@ max_epochs = 500;    %if no plateau is found, the training eventually stops anyw
 training_errors = [];%to store final classification in-training error from each fold
 test_errors = [];    %same as above but for fold-wise test errors
 
+
+splits = dataset_split(X,nfolds);
+
 for fold = 1:nfolds
   %obtain training and test sets for current fold
-  [train,test] = dataset_split(X,ntrain,ntest,fold);
   %initialize prototypes coordinates before training
   prototype = create_prototype(nProt,xRange,yRange);
+  
+  % convoluted way of extracting all data points for training and
+  % concatenating those chunks
+  train = reshape(permute(splits(:,:,1:end ~= fold),[1 3 2]), [], 3, 1);
+  test  = splits(:,:,fold);
+  
   %Training the LVQ1 classifier
-  for i = 1:ntrain
-    [E,prototype] = LVQ(train(:,:,i),prototype,eta,plateau_epochs,max_epochs);
-  end
-  training_errors = [training_errors E(end)];
+  [E,prototype] = LVQ(train,prototype,eta,plateau_epochs,max_epochs);
+  
   %Testing the model in current fold
   test_err = trainingError(test,prototype);
-  test_errors = [test_errors test_err];
+  test_errors(fold) = test_err;
+  training_errors(fold) = E(end);
 end
 
 %average generalization error across 10 folds
@@ -47,4 +52,5 @@ mean_err = mean(test_errors);
 
 %visualize the 10-fold cv classification errors in a bar plot
 barplot(training_errors,mean_err);
+%}
   
