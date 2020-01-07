@@ -38,7 +38,7 @@ for fold = 1:nfolds
   [E,prototype,lambda_out] = RLVQ(X,prototype,eta,lambda,lambdeta,plateau_epochs,max_epochs);
   
   % Testing the model in current fold
-  test_err = trainingError(test, prototype, lambda);
+  test_err = trainingError(test, prototype, lambda_out(end,:));
   test_errors(fold) = test_err;
   training_errors(fold) = E(end);
 end
