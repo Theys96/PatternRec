@@ -21,6 +21,9 @@ function plot_prototypes(prototypes,old_prototypes,startend)
       hold on
     end
   end
+  xlabel('feature 1','FontSize',13);
+  ylabel('feature 2','FontSize',13);
+  title({'Prototypes moving in feature space' sprintf('k = %g',k)},'FontSize',13);
   lgd = legend;
   lgd.FontSize = 12;
 end

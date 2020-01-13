@@ -20,8 +20,13 @@ function [clusters, prototypes] = k_means(data,k,evolution,plusplus)
     for mu = 2:k   %the left k-1 prototypes are picked among (still unchosen) data points
                    %more likely the farther the data points are from the
                    %nearest previously chosen prototype
+      dvec = [];   
+      %---for i = 1:P  %loop over data points   
+        dist = pdist2(data(i,:),prototypes,'squaredeuclidean');
+        dvec = [dvec min(dist)];   %store distance from nearest (already chosen) prototype
+      %---end
       dist = pdist2(data,prototypes,'squaredeuclidean');
-      dvec = min(dist,[],2)';
+      dvec = min(dist,[],2);
       cumdvec = cumsum(dvec);   %cumulative sum array
       loc = idx(mu-1);
       while any(idx==loc) %to prevent an existing prototype to be chosen again
@@ -41,7 +46,7 @@ function [clusters, prototypes] = k_means(data,k,evolution,plusplus)
   
   epoch = 0;
   maxepochs = 250;
-  while epoch <= maxepochs %to quit the loop if no convergence is found
+  while epoch <= maxepochs
     epoch = epoch + 1;
     old_prototypes = prototypes; %keep track of previous prototype set
     %compute distances between each given data point and the prototypes
