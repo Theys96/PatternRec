@@ -3,9 +3,9 @@ npatterns = size(data,1);
 dim = size(data,2);
 
 %Q4 - D(k) & Q5 - J(k),R(k)
-kmax = 50;
+kmax = 30;
 kvec = 1:kmax;
-nrep = 1;
+nrep = 10;
 Jvec = zeros([1,kmax]);
 Rvec = zeros([1,kmax]);
 Dvec = zeros([1,kmax]);
@@ -14,7 +14,7 @@ for k = kvec
   fprintf('k_meaning k = %g ... \n',k);
   for rep = 1:nrep %repeat nrep times for each value of k to average out random fluctuations
     J = 0;
-    [clusters,prototypes] = k_means(data,k,false,true);
+    [clusters,prototypes] = k_means(data,k,false,false);
     J = J + quantization_error(clusters,prototypes);
   end
   J = J/nrep;
