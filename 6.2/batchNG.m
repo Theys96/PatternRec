@@ -25,6 +25,10 @@ lambda = lambda0 * (0.01/lambda0).^([0:(epochs-1)]/epochs);
 % note: the lecture slides refer to this parameter as sigma^2
 %       instead of lambda
 
+pl = 0;
+figure(1);
+sgtitle('Batch Neural Gas at various epochs');
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Action
 
@@ -52,17 +56,19 @@ for i=1:epochs,
   % update
   prototypes = D_prototypes ;
   
+  fprintf(1,'%d / %d \r',i,epochs);
+  
   % track
-  if 1   %plot each epoch
-    fprintf(1,'%d / %d \r',i,epochs);
-    hold off
+  if ismember(i, [20,100,200,500])   %plot each epoch
+    pl = pl+1;
+    figure(1)
+    subplot(2,2,pl)
     plot(Data(:,xdim),Data(:,ydim),'bo','markersize',3)
     hold on
     plot(prototypes(:,xdim),prototypes(:,ydim),'r.','markersize',10,'linewidth',3)
-    % write code to plot decision boundaries
+    title(sprintf('Epoch %d', i))
     voronoi(prototypes(:,xdim),prototypes(:,ydim))
-    %pause
-    %or
+    hold off
     drawnow
   end
 end

@@ -1,3 +1,3 @@
 data = load('checkerboard.mat').checkerboard;
 
-batchNG(data, 100, 100);
+batchNG(data, 100, 500);
