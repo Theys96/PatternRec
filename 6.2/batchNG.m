@@ -36,26 +36,16 @@ for i=1:epochs,
     
     % sample vector
     x = Data(j,:);       % sample vector
-    X = x(ones(n,1),:);  % we'll need this
     
+    % compute ranks
     dist = pdist2(prototypes, x, 'squaredeuclidean');
-    [~,p] = sort(dist,'descend');
+    [~,p] = sort(dist,'ascend');
     rank = 1:length(dist);
-    rank(p) = rank;
+    rank(p) = rank - 1;
+    
+    % compute updates for all prototypes based on current sample vector
     D_prototypes    = D_prototypes + exp(-rank / lambda(i))' * x;
     D_prototypes_av = D_prototypes_av + exp(-rank / lambda(i))';
-    if (min(D_prototypes_av) == 0)
-        D_prototypes_av
-    end;
-    
-    % neighborhood ranking
-    % DISTANCE!!!
-    % 1-BMU, 2-BMU, etc. (hint:sort)
-    %find ranking,h,H
-    
-    % accumulate update
-    %D_prototypes = ...
-    %D_prototypes_av = ...
   end
   D_prototypes = D_prototypes ./ D_prototypes_av;
       
@@ -63,7 +53,7 @@ for i=1:epochs,
   prototypes = D_prototypes ;
   
   % track
-  if 1,   %plot each epoch
+  if 1   %plot each epoch
     fprintf(1,'%d / %d \r',i,epochs);
     hold off
     plot(Data(:,xdim),Data(:,ydim),'bo','markersize',3)
